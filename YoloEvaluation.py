@@ -1,3 +1,14 @@
+'''
+========================================================================
+        ╦ ╦┌─┐┌─┐┌─┐┌─┐┌┬┐  ╔╦╗┌─┐┌─┐┌┬┐┬ ┬  ╔╗ ┌─┐┬  ┌─┐┬ ┬┌─┐
+        ╠═╣│ │└─┐└─┐├─┤│││  ║║║├─┤│ ┬ ││└┬┘  ╠╩╗├─┤│  ├─┤├─┤├─┤
+        ╩ ╩└─┘└─┘└─┘┴ ┴┴ ┴  ╩ ╩┴ ┴└─┘─┴┘ ┴   ╚═╝┴ ┴┴─┘┴ ┴┴ ┴┴ ┴
+========================================================================
+# Author: Hossam Magdy Balaha
+# Initial Creation Date: Jan 1st, 2024
+# Permissions and Citation: Refer to the README file.
+'''
+
 import cv2, os, tqdm
 import numpy as np
 import pandas as pd
@@ -5,7 +16,9 @@ from ultralytics import YOLO
 from sklearn.metrics import *
 
 import warnings
+
 warnings.filterwarnings('ignore')
+
 
 def CalculateMetrics(references, predictions):
   cm = confusion_matrix(references, predictions)
@@ -62,16 +75,16 @@ def CalculateMetrics(references, predictions):
   weightedYule = np.sum(yule * weights)
 
   avg = (
-            weightedAccuracy
-            + weightedPrecision
-            + weightedRecall
-            + weightedSpecificity
-            + weightedF1
-            + weightedBAC
-            + weightedIoU
-            + weightedYouden
-            + weightedYule
-            + weightedMCC
+          weightedAccuracy
+          + weightedPrecision
+          + weightedRecall
+          + weightedSpecificity
+          + weightedF1
+          + weightedBAC
+          + weightedIoU
+          + weightedYouden
+          + weightedYule
+          + weightedMCC
         ) / 10.0
 
   metrics = {
@@ -100,12 +113,12 @@ if __name__ == "__main__":
   outputFolderName = "CK+48 - Output"
   datasetDirName = r"CK+48"
   runsFolder = r"runs-CK+48"
-  baseDir = os.getcwd() # + r"/Potato Disease Leaf Dataset (PLD) Exp"
-  extensions = ['tiff', 'tif', 'jpeg','jpg', 'png', 'bmp']
+  baseDir = os.getcwd()
+  extensions = ['tiff', 'tif', 'jpeg', 'jpg', 'png', 'bmp']
   inputShape = (100, 100)
   for cat in ["val", "test", "train"]:
     # modelKeyword = "yolov8s"  # yolov8n, yolov8s, yolov8m, yolov8l, yolov8x
-    for modelKeyword in ["yolov8n", "yolov8s", "yolov8m", "yolov8x", "yolov8l"]: #
+    for modelKeyword in ["yolov8n", "yolov8s", "yolov8m", "yolov8x", "yolov8l"]:  #
       weights = rf"{baseDir}\{runsFolder}\classify\{modelKeyword}-cls-{inputShape[0]}\weights\best.pt"
       model = YOLO(weights, task="classify", verbose=True).load(weights)
       print(model.names)

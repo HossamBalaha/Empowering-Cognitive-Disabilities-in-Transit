@@ -1,3 +1,14 @@
+'''
+========================================================================
+        ╦ ╦┌─┐┌─┐┌─┐┌─┐┌┬┐  ╔╦╗┌─┐┌─┐┌┬┐┬ ┬  ╔╗ ┌─┐┬  ┌─┐┬ ┬┌─┐
+        ╠═╣│ │└─┐└─┐├─┤│││  ║║║├─┤│ ┬ ││└┬┘  ╠╩╗├─┤│  ├─┤├─┤├─┤
+        ╩ ╩└─┘└─┘└─┘┴ ┴┴ ┴  ╩ ╩┴ ┴└─┘─┴┘ ┴   ╚═╝┴ ┴┴─┘┴ ┴┴ ┴┴ ┴
+========================================================================
+# Author: Hossam Magdy Balaha
+# Initial Creation Date: Jan 1st, 2024
+# Permissions and Citation: Refer to the README file.
+'''
+
 import os
 import numpy as np
 from sklearn.metrics import confusion_matrix
@@ -30,7 +41,7 @@ def CalculateMetrics(references, predictions):
   recall = (TP + eps) / (TP + FN + eps)
   specificity = (TN + eps) / (TN + FP + eps)
   f1 = (2.0 * (precision * recall) + eps) / (
-      precision + recall + eps)
+    precision + recall + eps)
   iou = (TP + eps) / (TP + FP + FN + eps)
   bac = (specificity + recall) / 2.0
   mcc = ((TP * TN) - (FP * FN) + eps) / np.sqrt(
@@ -43,8 +54,8 @@ def CalculateMetrics(references, predictions):
   # Compute joint probability distribution
   joint_prob = np.zeros((len(np.unique(references)), len(np.unique(predictions))))
   for i, true_label in enumerate(np.unique(references)):
-      for j, pred_label in enumerate(np.unique(predictions)):
-          joint_prob[i, j] = np.sum((references == true_label) & (predictions == pred_label)) / len(references)
+    for j, pred_label in enumerate(np.unique(predictions)):
+      joint_prob[i, j] = np.sum((references == true_label) & (predictions == pred_label)) / len(references)
 
   # Compute marginal probabilities
   p_x = np.sum(joint_prob, axis=1)  # P(x_i)
@@ -53,9 +64,9 @@ def CalculateMetrics(references, predictions):
   # Compute Mutual Information
   mutualInfo = 0
   for i, true_label in enumerate(np.unique(references)):
-      for j, pred_label in enumerate(np.unique(predictions)):
-          if (joint_prob[i, j] > 0):
-              mutualInfo += joint_prob[i, j] * np.log(joint_prob[i, j] / (p_x[i] * p_y[j]))
+    for j, pred_label in enumerate(np.unique(predictions)):
+      if (joint_prob[i, j] > 0):
+        mutualInfo += joint_prob[i, j] * np.log(joint_prob[i, j] / (p_x[i] * p_y[j]))
 
   references = np.array(references)
   totalSamples = len(references)
@@ -98,9 +109,6 @@ def CalculateMetrics(references, predictions):
   return metrics
 
 
-# resultsPath = r"PlantVillage Dataset Exp"
-# resultsPath = r"Plant Disease Dataset Exp"
-# resultsPath = r"Potato Disease Leaf Dataset (PLD) Exp"
 resultsPath = r"runs-CK+48"
 
 results = []
@@ -109,7 +117,7 @@ for modelKeyword in [
 ]:
   references = []
   predictions = []
-  for datasetKeyword in ["Test"]: # "Val", "Test", "Train"
+  for datasetKeyword in ["Test"]:  # "Val", "Test", "Train"
     csvFile = os.path.join(
       resultsPath,
       f"{modelKeyword} Classification-{datasetKeyword}.csv"
@@ -131,7 +139,7 @@ for modelKeyword in [
   #   print(f"{key}: {value}")
 
   results.append({
-    "Model"   : modelKeyword,
+    "Model": modelKeyword,
     # "Dataset" : datasetKeyword,
     **metrics,
   })
